@@ -8,6 +8,20 @@ const Button = ({ handleClick, text }) =>
 const Display = ({ freq, text }) =>
   <p>{text} {freq}</p>
 
+const Statistics = ({ good, neutral, bad, total, calcAverage, calcPositiveFeedback }) => {
+  return (
+    <div>
+      <h1>Statistics</h1>
+      <Display freq={good} text="Good" />
+      <Display freq={neutral} text="Neutral" />
+      <Display freq={bad} text="Bad" />
+      <Display freq={total} text="All" />
+      <Display freq={calcAverage()} text="Average" />
+      <Display freq={calcPositiveFeedback() + ' %'} text="Positive" />
+    </div>
+  )
+}
+
 const App = () => {
   const [good, setGood] = useState(0)
   const [neutral, setNeutral] = useState(0)
@@ -36,13 +50,7 @@ const App = () => {
       <Button handleClick={incrGood} text="Good" />
       <Button handleClick={incrNeutral} text="Neutral" />
       <Button handleClick={incrBad} text="Bad" />
-      <h1>Statistics</h1>
-      <Display freq={good} text="Good" />
-      <Display freq={neutral} text="Neutral" />
-      <Display freq={bad} text="Bad" />
-      <Display freq={total} text="All" />
-      <Display freq={calcAverage()} text="Average" />
-      <Display freq={calcPositiveFeedback() + ' %'} text="Positive" />
+      <Statistics good={good} neutral={neutral} bad={bad} total={total} calcAverage={calcAverage} calcPositiveFeedback={calcPositiveFeedback} />
     </div >
   )
 }
