@@ -5,20 +5,30 @@ import './index.css';
 const Button = ({ handleClick, text }) =>
   <button onClick={handleClick}>{text}</button>
 
-const Display = ({ freq, text }) =>
-  <p>{text} {freq}</p>
+const Statistic = ({ freq, text }) => {
+  return (
+    <tr>
+      <td>{text}</td>
+      <td>{freq}</td>
+    </tr>
+  )
+}
 
 const Statistics = ({ good, neutral, bad, total, calcAverage, calcPositiveFeedback }) => {
   if (total) {
     return (
       <div>
         <h1>Statistics</h1>
-        <Display freq={good} text="Good" />
-        <Display freq={neutral} text="Neutral" />
-        <Display freq={bad} text="Bad" />
-        <Display freq={total} text="All" />
-        <Display freq={calcAverage()} text="Average" />
-        <Display freq={calcPositiveFeedback() + ' %'} text="Positive" />
+        <table>
+          <tbody>
+            <Statistic freq={good} text="Good" />
+            <Statistic freq={neutral} text="Neutral" />
+            <Statistic freq={bad} text="Bad" />
+            <Statistic freq={total} text="All" />
+            <Statistic freq={calcAverage()} text="Average" />
+            <Statistic freq={calcPositiveFeedback() + ' %'} text="Positive" />
+          </tbody>
+        </table>
       </div>
     )
   } else return (
