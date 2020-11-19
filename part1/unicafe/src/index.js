@@ -9,15 +9,21 @@ const Display = ({ freq, text }) =>
   <p>{text} {freq}</p>
 
 const Statistics = ({ good, neutral, bad, total, calcAverage, calcPositiveFeedback }) => {
-  return (
+  if (total) {
+    return (
+      <div>
+        <h1>Statistics</h1>
+        <Display freq={good} text="Good" />
+        <Display freq={neutral} text="Neutral" />
+        <Display freq={bad} text="Bad" />
+        <Display freq={total} text="All" />
+        <Display freq={calcAverage()} text="Average" />
+        <Display freq={calcPositiveFeedback() + ' %'} text="Positive" />
+      </div>
+    )
+  } else return (
     <div>
-      <h1>Statistics</h1>
-      <Display freq={good} text="Good" />
-      <Display freq={neutral} text="Neutral" />
-      <Display freq={bad} text="Bad" />
-      <Display freq={total} text="All" />
-      <Display freq={calcAverage()} text="Average" />
-      <Display freq={calcPositiveFeedback() + ' %'} text="Positive" />
+      <h1>Statistics</h1> <p>No feedback given</p>
     </div>
   )
 }
@@ -41,10 +47,10 @@ const App = () => {
     setTotal(total + 1)
   }
 
-  const calcAverage = () => (good - bad) / total || '0'
-  const calcPositiveFeedback = () => good / total * 100 || '0'
+  const calcAverage = () => (good - bad) / total
+  const calcPositiveFeedback = () => good / total * 100
 
-  return (
+  const returnTags =
     <div>
       <h1>How was the food ?</h1>
       <Button handleClick={incrGood} text="Good" />
@@ -52,7 +58,8 @@ const App = () => {
       <Button handleClick={incrBad} text="Bad" />
       <Statistics good={good} neutral={neutral} bad={bad} total={total} calcAverage={calcAverage} calcPositiveFeedback={calcPositiveFeedback} />
     </div >
-  )
+
+  return returnTags;
 }
 
 ReactDOM.render(
