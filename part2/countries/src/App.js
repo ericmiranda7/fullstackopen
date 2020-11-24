@@ -31,7 +31,11 @@ const App = () => {
       <h1>Find country</h1>
       <Search handleSearchChange={handleSearchChange}/>
       <h1>Results</h1>
-      <Results countries={countriesToShow}/>
+      {
+        countriesToShow ?
+        <Results countries={countriesToShow} /> :
+        ''
+      }
     </div>
   )
 }

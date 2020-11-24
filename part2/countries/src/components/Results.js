@@ -1,13 +1,31 @@
-import React from 'react'
+import React, { useState } from 'react'
 import View from './View'
 
+const Result = ({ country }) => {
+
+    const [showView, setShowView] = useState(false)
+
+    const handleClick = () => setShowView(!showView)
+
+    return (
+        <div>
+            {country.name} <button onClick={handleClick}>Show</button>
+            { showView ? <View country={country} /> : ''}
+        </div>
+    )
+}
+
 const Results = ({ countries }) => {
-    if (countries.length > 1) {
-        if (countries.length > 10) return <p>Too many hits, please be more specific.</p>
-        return countries.map((country) => <p key={country.name}>{country.name}</p>)
-    } else if (countries.length === 1) {
+
+    if (countries.length === 1) {
         return <View country={countries[0]} />
-    } else return <p></p>
+    } else if (countries.length < 11) {
+        return (
+            countries.map(
+                (country) => <Result key={country.name} country={country} />
+            )
+        )
+    } else return <p>Please be more specific with your search</p>
 }
 
 export default Results
