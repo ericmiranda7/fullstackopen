@@ -44,7 +44,7 @@ const App = () => {
 
   const personsToShow = showAll ?
     persons :
-    persons.filter(person => person.name.toLowerCase().includes(searchName))
+    persons.filter(person => person.name.toLowerCase().includes(searchName.toLowerCase()))
 
   return (
     <div>
