@@ -44,6 +44,13 @@ const App = () => {
     }
   }
 
+  const deletePerson = (person) => {
+    window.confirm(`Are you sure you want to delete ${person.name} ?`)
+    personService
+    .delPerson(person.id)
+    .then(response => setPersons(persons.filter(p => p.id !== person.id)))
+  }
+
 
 
   const personsToShow = showAll ?
@@ -61,7 +68,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
         handleClick={addPerson}
       />
-      <Display persons={personsToShow} />
+      <Display persons={personsToShow} handleClick={deletePerson} />
     </div>
   )
 }
