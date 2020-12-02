@@ -12,7 +12,7 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
   const [showAll, setShowAll] = useState(true)
-  const [notif, setNotif] = useState('')
+  const [notif, setNotif] = useState({})
 
   useEffect(() =>
     personService
@@ -20,8 +20,8 @@ const App = () => {
       .then(response => setPersons(response))
     , [])
 
-  const notify = message => {
-    setNotif(message)
+  const notify = (message, msgClass) => {
+    setNotif({ message, class: msgClass || 0 })
     setTimeout(
       () => setNotif(null), 5000
     )
@@ -51,13 +51,15 @@ const App = () => {
     if (existingPerson) {
       let replace = window.confirm(`${newName} is already added to phonebook, replace with new number ?`)
       newPerson.id = existingPerson.id
-    
+
       if (replace) {
         personService
         .updatePerson(existingPerson.id, newPerson)
-        .then(response => setPersons(persons.map(person => person.id === response.id ? newPerson : person)))
-
-        notify(`${newPerson.name}'s number was changed to ${newPerson.number}`)
+        .then(response => setPersons(persons.map(person => {
+          notify(`${newPerson.name}'s number was changed to ${newPerson.number}`)
+          return person.id === response.id ? newPerson : person
+        })))
+        .catch(error => notify(`${existingPerson.name} has been deleted from the system`, 1))
       }
     } else {
       personService.create(newPerson).then(response => setPersons(persons.concat(response)))

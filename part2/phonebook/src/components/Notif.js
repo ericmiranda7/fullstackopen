@@ -3,9 +3,15 @@ import React from 'react'
 const Notification = ({ message }) => {
     if (!message) return null
     else {
+        const msgStyles = {
+            color: message.class ? 'red' : 'green',
+            paddingTop: '5px',
+            fontSize: '15px'
+        }
+
         return (
-            <div className="error">
-                {message}
+            <div style={msgStyles}>
+                {message.message}
             </div>
         )
     }

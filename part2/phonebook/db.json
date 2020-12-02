@@ -16,34 +16,9 @@
       "id": 3
     },
     {
-      "name": "Miranda boy",
-      "number": "3123",
-      "id": 6
-    },
-    {
-      "name": "No Errors",
-      "number": "3112",
-      "id": 8
-    },
-    {
       "name": "Hombre Erico",
       "number": "231",
       "id": 9
-    },
-    {
-      "name": "z",
-      "number": "2",
-      "id": 16
-    },
-    {
-      "name": "a",
-      "number": "123",
-      "id": 17
-    },
-    {
-      "name": "asdf",
-      "number": "21",
-      "id": 18
     },
     {
       "name": "John McCain",
@@ -54,11 +29,6 @@
       "name": "Cokoo Bara",
       "number": "919",
       "id": 20
-    },
-    {
-      "name": "Coco Loco",
-      "number": "1123",
-      "id": 21
     }
   ]
 }
