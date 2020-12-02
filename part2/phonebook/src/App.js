@@ -3,6 +3,7 @@ import Display from './components/Display'
 import Form from './components/Form'
 import Search from './components/Search'
 import personService from './services/personService'
+import Notification from './components/Notif'
 
 const App = () => {
 
@@ -11,12 +12,20 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [searchName, setSearchName] = useState('')
   const [showAll, setShowAll] = useState(true)
+  const [notif, setNotif] = useState('')
 
   useEffect(() =>
     personService
       .getAll()
       .then(response => setPersons(response))
     , [])
+
+  const notify = message => {
+    setNotif(message)
+    setTimeout(
+      () => setNotif(null), 5000
+    )
+  }
 
   const handleNameChange = event => setNewName(event.target.value)
 
@@ -47,9 +56,13 @@ const App = () => {
         personService
         .updatePerson(existingPerson.id, newPerson)
         .then(response => setPersons(persons.map(person => person.id === response.id ? newPerson : person)))
+
+        notify(`${newPerson.name}'s number was changed to ${newPerson.number}`)
       }
     } else {
       personService.create(newPerson).then(response => setPersons(persons.concat(response)))
+
+      notify(`${newPerson.name} was added to the phonebook`)
     }
   }
 
@@ -58,6 +71,8 @@ const App = () => {
     personService
     .delPerson(person.id)
     .then(response => setPersons(persons.filter(p => p.id !== person.id)))
+
+    notify(`${person.name} was removed from the phonebook.`)
   }
 
 
@@ -69,6 +84,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notif} />
       <Search searchName={searchName} handleSearchChange={handleSearchChange} />
       <Form
         newName={newName}
