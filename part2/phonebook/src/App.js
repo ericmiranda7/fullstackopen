@@ -62,9 +62,12 @@ const App = () => {
         .catch(error => notify(`${existingPerson.name} has been deleted from the system`, 1))
       }
     } else {
-      personService.create(newPerson).then(response => setPersons(persons.concat(response)))
-
-      notify(`${newPerson.name} was added to the phonebook`)
+      personService.create(newPerson)
+      .then(response => {
+        setPersons(persons.concat(response))
+        notify(`${newPerson.name} was added to the phonebook`)
+      })
+      .catch(error => notify('Name should be minimum 3 characters and number minimum 8 digits', 1))
     }
   }
 
