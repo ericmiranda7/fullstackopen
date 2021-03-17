@@ -34,7 +34,7 @@ test('unique identifier is id', async () => {
 })
 
 test('post request adds to database', async () => {
-    const newNote = {
+    const newBlog = {
         title: 'Exprees',
         author: 'Dunno',
         url: 'www.happy.com',
@@ -43,7 +43,7 @@ test('post request adds to database', async () => {
 
     await api
         .post('/api/blogs')
-        .send(newNote)
+        .send(newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
 
@@ -55,6 +55,24 @@ test('post request adds to database', async () => {
     expect(titles).toContain('Exprees')
 
     
+})
+
+test('post without likes defaults likes to 0', async () => {
+    const newBlog = {
+        title: 'No likes',
+        author: 'Eric',
+        url: 'www.likes.com',
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    
+    expect(response.body[helper.blogs.length].likes).toBe(0)
 })
 
 afterAll(() => {
