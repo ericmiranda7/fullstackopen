@@ -1,5 +1,6 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const { blogs } = require('../tests/test_helper')
 
 blogsRouter.get('/', (request, response) => {
     Blog
@@ -16,11 +17,15 @@ blogsRouter.post('/', (request, response) => {
         blog.likes = 0
     }
 
-    blog
-        .save()
-        .then(result => {
-            response.status(201).json(result)
-        })
+    if (blog.title === undefined || blog.url === undefined) {
+        response.sendStatus(400)
+    } else {
+        blog
+            .save()
+            .then(result => {
+                response.status(201).json(result)
+            })
+    }
 })
 
 module.exports = blogsRouter

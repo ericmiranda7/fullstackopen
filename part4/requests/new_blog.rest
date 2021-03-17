@@ -2,7 +2,6 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
-    "title": "TLC",
     "author": "Eric",
     "url": "www.eric.com",
     "likes": "69"

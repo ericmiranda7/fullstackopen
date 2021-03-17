@@ -75,6 +75,18 @@ test('post without likes defaults likes to 0', async () => {
     expect(response.body[helper.blogs.length].likes).toBe(0)
 })
 
+test('post without title or url returns bad request', async () => {
+    const newBlog = {
+        author: 'James',
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newBlog)
+        .expect(400)
+        
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
