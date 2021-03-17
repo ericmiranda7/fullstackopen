@@ -27,10 +27,34 @@ test('there are 3 blogs', async () => {
     expect(response.body).toHaveLength(3)
 })
 
-test('unique identifier is id', async() => {
+test('unique identifier is id', async () => {
     const response = await api.get('/api/blogs')
 
     expect(response.body[0].id).toBeDefined()
+})
+
+test('post request adds to database', async () => {
+    const newNote = {
+        title: 'Exprees',
+        author: 'Dunno',
+        url: 'www.happy.com',
+        likes: '36',
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(newNote)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+
+    const titles = response.body.map(r => r.title)
+
+    expect(response.body).toHaveLength(helper.blogs.length + 1)
+    expect(titles).toContain('Exprees')
+
+    
 })
 
 afterAll(() => {
