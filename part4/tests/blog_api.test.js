@@ -27,6 +27,12 @@ test('there are 3 blogs', async () => {
     expect(response.body).toHaveLength(3)
 })
 
+test('unique identifier is id', async() => {
+    const response = await api.get('/api/blogs')
+
+    expect(response.body[0].id).toBeDefined()
+})
+
 afterAll(() => {
     mongoose.connection.close()
 })
