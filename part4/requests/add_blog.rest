@@ -2,8 +2,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
- "title": "TLC",
- "author": "James McAvoy",
- "url": "jabadoo.com",
- "likes": 23 
+ "title": "Finalmento",
+ "author": "Josvoy",
+ "url": "eric.com",
+ "likes": 500
 }
