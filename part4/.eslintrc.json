@@ -19,6 +19,10 @@
       "comma-dangle": [
         "error",
         "never"
+      ],
+      "arrow-parens": [
+        "error",
+        "never"
       ]
     }
 }
