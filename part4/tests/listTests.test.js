@@ -46,6 +46,18 @@ describe('4.8 - 4.12 tests', () => {
     const result = await api.get('/api/blogs')
     expect(result.body).toHaveLength(testHelper.initialBlogs.length + 1)
   })
+
+  test('likes == 0 if likes missing', async () => {
+    const blog = new Blog({
+      title: 'There are no likes for this blog',
+      author: 'MoocFI',
+      url: 'www.moocfi.com'
+    })
+
+    const result = await api.post('/api/blogs').send(blog)
+    
+    expect(result.body.likes).toEqual(0)
+  })
 })
 
 afterAll(() => {
