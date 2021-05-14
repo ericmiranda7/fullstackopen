@@ -6,8 +6,6 @@ const Blog = require('../models/blog')
 
 const api = supertest(app)
 
-jest.setTimeout(10000);
-
 beforeEach(async () => {
   await Blog.deleteMany({})
 
@@ -32,12 +30,12 @@ describe('4.8 - 4.12 tests', () => {
   })
 
   test('post creates new blog in db', async () => {
-    const blog = new Blog({
+    const blog = {
       title: 'Hombre',
       author: 'Erico',
       url: 'www.hombreerico.com',
       likes: 42
-    })
+    }
 
     await api.post('/api/blogs').send(blog)
       .expect(201)
@@ -48,16 +46,31 @@ describe('4.8 - 4.12 tests', () => {
   })
 
   test('likes == 0 if likes missing', async () => {
-    const blog = new Blog({
+    const blog = {
       title: 'There are no likes for this blog',
       author: 'MoocFI',
       url: 'www.moocfi.com'
-    })
+    }
 
     const result = await api.post('/api/blogs').send(blog)
     
     expect(result.body.likes).toEqual(0)
   })
+
+  test('if title AND url missing, response is 400', async () => {
+    const blog = {
+      author: 'Joobfi'
+    }
+
+    await api.post('/api/blogs')
+      .expect(400)
+
+    const blogsInDb = await api.get('/api/blogs')
+
+    expect(blogsInDb.body).toHaveLength(testHelper.initialBlogs.length)
+
+})
+
 })
 
 afterAll(() => {

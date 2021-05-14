@@ -2,7 +2,5 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
- "title": "No likes",
- "author": "Josvoy",
- "url": "eric.com"
+  "author": "not added"
 }
