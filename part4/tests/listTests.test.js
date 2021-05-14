@@ -6,6 +6,9 @@ const Blog = require('../models/blog')
 
 const api = supertest(app)
 
+// For my internet connection, default 5seconds is too less to connect to mongoDB
+jest.setTimeout(10000)
+
 beforeEach(async () => {
   await Blog.deleteMany({})
 
@@ -41,8 +44,8 @@ describe('4.8 - 4.12 tests', () => {
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
-    const result = await api.get('/api/blogs')
-    expect(result.body).toHaveLength(testHelper.initialBlogs.length + 1)
+    const blogsAfterPost = await testHelper.blogsInDb()
+    expect(blogsAfterPost).toHaveLength(testHelper.initialBlogs.length + 1)
   })
 
   test('likes == 0 if likes missing', async () => {
@@ -65,12 +68,23 @@ describe('4.8 - 4.12 tests', () => {
     await api.post('/api/blogs')
       .expect(400)
 
-    const blogsInDb = await api.get('/api/blogs')
+    const blogsInDb = await testHelper.blogsInDb()
 
-    expect(blogsInDb.body).toHaveLength(testHelper.initialBlogs.length)
-
+    expect(blogsInDb).toHaveLength(testHelper.initialBlogs.length)
+  })
 })
 
+describe('tests 4.13 - 4.14', () => {
+  test('blog is deleted', async () => {
+    const blogsList = await testHelper.blogsInDb()
+    const idToDelete = blogsList[0].id
+
+    await api.delete(`/api/blogs/${idToDelete}`)
+      .expect(204)
+
+    const newBlogsInDb = await testHelper.blogsInDb()
+    expect(newBlogsInDb).toHaveLength(testHelper.initialBlogs.length - 1)
+  })
 })
 
 afterAll(() => {
