@@ -30,6 +30,22 @@ describe('4.8 - 4.12 tests', () => {
     const results = await api.get('/api/blogs')
     expect(results.body[0].id).toBeDefined()
   })
+
+  test('post creates new blog in db', async () => {
+    const blog = new Blog({
+      title: 'Hombre',
+      author: 'Erico',
+      url: 'www.hombreerico.com',
+      likes: 42
+    })
+
+    await api.post('/api/blogs').send(blog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const result = await api.get('/api/blogs')
+    expect(result.body).toHaveLength(testHelper.initialBlogs.length + 1)
+  })
 })
 
 afterAll(() => {
