@@ -85,6 +85,16 @@ describe('tests 4.13 - 4.14', () => {
     const newBlogsInDb = await testHelper.blogsInDb()
     expect(newBlogsInDb).toHaveLength(testHelper.initialBlogs.length - 1)
   })
+
+  test('blog likes are updated', async () => {
+    const blogsInDb = await testHelper.blogsInDb()
+
+    const blogIdToEdit = blogsInDb[0].id
+
+    const updatedBlog = await api.put(`/api/blogs/${blogIdToEdit}`).send({ likes: 69 })
+
+    expect(updatedBlog.body.likes).toBe(69)
+  })
 })
 
 afterAll(() => {
