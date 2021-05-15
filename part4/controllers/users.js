@@ -9,6 +9,18 @@ usersRouter.get('/', async (request, response) => {
 })
 
 usersRouter.post('/', async (request, response) => {
+  const requestUser = {
+    username: request.body.username,
+    name: request.body.name,
+    password: request.body.password
+  }
+
+  if (!requestUser.username || !requestUser.password) {
+    return response.status(400).json({ error: 'username or password is missing' })
+  }
+
+  if (requestUser.password.length < 3 || requestUser.username.length < 3) return response.status(400).json({ error: 'password and username should be atleast 3 characters.' })
+
   const saltRounds = 10
   const passwordHash = await bcrypt.hash(request.body.password, saltRounds)
 
@@ -19,7 +31,7 @@ usersRouter.post('/', async (request, response) => {
   })
   const savedUser = await user.save()
 
-  response.json(savedUser)
+  return response.json(savedUser)
 })
 
 module.exports = usersRouter

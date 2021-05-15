@@ -134,6 +134,61 @@ describe('with a single user in db', () => {
     expect(usersAtEnd.map(user => user.username)).toContain(userToAdd.username)
     expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
   })
+
+  test('user without username or password is not added to db', async () => {
+    const user = {
+      name: 'Eric'
+    }
+
+    await api
+      .post('/api/users')
+      .send(user)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
+
+  test('both password and username should be 3 characters', async () => {
+    const usersAtStart = await testHelper.usersInDb()
+
+    const user = {
+      username: 'jojo',
+      name: 'Johnny',
+      password: 'we'
+    }
+
+    await api
+      .post('/api/users')
+      .send(user)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    user.password = 'weak'
+    user.username = 'jo'
+
+    await api
+      .post('/api/users')
+      .send(user)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await testHelper.usersInDb()
+
+    expect(usersAtEnd.length).toBe(usersAtStart.length)
+  })
+
+  test('username must be unique', async () => {
+    const dupUser = {
+      username: 'iFirst',
+      name: 'Duplicator',
+      password: 'str'
+    }
+
+    await api
+      .post('/api/users')
+      .send(dupUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+  })
 })
 
 afterAll(() => {
