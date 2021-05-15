@@ -1,20 +1,21 @@
 const supertest = require('supertest')
 const mongoose = require('mongoose')
+const bcrypt = require('bcrypt')
 const app = require('../app')
 const testHelper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
-// For my internet connection, default 5seconds is too less to connect to mongoDB
+// for my internet connection
 jest.setTimeout(10000)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
+  const blogObjects = testHelper.initialBlogs.map(blog => new Blog(blog))
 
-  const blogObjects = testHelper.initialBlogs.map((blog) => new Blog(blog))
-
-  const promiseArray = blogObjects.map((blog) => blog.save())
+  const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
 })
 
@@ -56,7 +57,7 @@ describe('4.8 - 4.12 tests', () => {
     }
 
     const result = await api.post('/api/blogs').send(blog)
-    
+
     expect(result.body.likes).toEqual(0)
   })
 
@@ -65,7 +66,7 @@ describe('4.8 - 4.12 tests', () => {
       author: 'Joobfi'
     }
 
-    await api.post('/api/blogs')
+    await api.post('/api/blogs').send(blog)
       .expect(400)
 
     const blogsInDb = await testHelper.blogsInDb()
@@ -94,6 +95,44 @@ describe('tests 4.13 - 4.14', () => {
     const updatedBlog = await api.put(`/api/blogs/${blogIdToEdit}`).send({ likes: 69 })
 
     expect(updatedBlog.body.likes).toBe(69)
+  })
+})
+
+describe('with a single user in db', () => {
+  beforeEach(async () => {
+    await User.deleteMany({})
+
+    const saltRounds = 10
+    const passwordHash = await bcrypt.hash('secret', saltRounds)
+
+    const initialUser = new User({
+      username: 'iFirst',
+      name: 'First Person',
+      passwordHash
+    })
+
+    await initialUser.save()
+  })
+
+  test('user is added to db with valid request', async () => {
+    const usersAtStart = await testHelper.usersInDb()
+
+    const userToAdd = {
+      username: 'Eric',
+      name: 'Hombre',
+      password: 'JojoRabbit'
+    }
+
+    await api
+      .post('/api/users')
+      .send(userToAdd)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await testHelper.usersInDb()
+
+    expect(usersAtEnd.map(user => user.username)).toContain(userToAdd.username)
+    expect(usersAtEnd).toHaveLength(usersAtStart.length + 1)
   })
 })
 
