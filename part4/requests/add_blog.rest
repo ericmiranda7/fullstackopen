@@ -2,5 +2,8 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "author": "not added"
+  "title": "Latest CRAYY",
+  "author": "CrayCray",
+  "url": "rayray.com",
+  "likes": 34
 }
