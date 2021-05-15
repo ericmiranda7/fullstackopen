@@ -1,9 +1,9 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: bearer cyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVyaWNtOTciLCJpZCI6IjYwOWZkMzE3OGIyYTZiZTkxZDAzZWZmMCIsImlhdCI6MTYyMTA4Nzg0MH0.fKo1_xyva5HK1unBoxPYbDsHvBw95hC_DWVjIR_D1Cs
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImVyaWNtOTciLCJpZCI6IjYwOWZkMzE3OGIyYTZiZTkxZDAzZWZmMCIsImlhdCI6MTYyMTA4Nzg0MH0.fKo1_xyva5HK1unBoxPYbDsHvBw95hC_DWVjIR_D1Cs
 
 {
-  "title": "Really not using token !",
+  "title": "Really JimJamJuly !",
   "author": "CrayCray",
   "url": "rayray.com",
   "likes": 34
