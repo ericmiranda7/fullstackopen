@@ -1,3 +1,5 @@
+/* eslint-disable consistent-return */
+const jwt = require('jsonwebtoken')
 const logger = require('./logger')
 
 const requestLogger = (request, response, next) => {
@@ -16,6 +18,18 @@ const tokenExtractor = (request, response, next) => {
     : null
 
   request.token = token
+
+  next()
+}
+
+const userExtractor = async (request, response, next) => {
+  const { token } = request
+
+  const decodedToken = jwt.verify(token, process.env.SECRET)
+
+  if (!token || !decodedToken) return response.status(403).json({ error: 'missing or invalid token' })
+
+  request.user = decodedToken
 
   next()
 }
@@ -40,5 +54,6 @@ module.exports = {
   requestLogger,
   unkownEndpoint,
   errorHandler,
-  tokenExtractor
+  tokenExtractor,
+  userExtractor
 }

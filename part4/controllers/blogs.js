@@ -1,21 +1,21 @@
 /* eslint-disable no-underscore-dangle */
 const blogsRouter = require('express').Router()
-const jwt = require('jsonwebtoken')
 const Blog = require('../models/blog')
 const User = require('../models/user')
+const {userExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response) => {
+blogsRouter.post('/', userExtractor, async (request, response) => {
   const { token } = request
 
-  const decodedToken = jwt.verify(token, process.env.SECRET)
-  if (!token || !decodedToken.id) return response.status(401).json({ error: 'token missing or invalid' })
-
-  const verifiedUserId = decodedToken.id
+  const userFromRequest = request.user
+  console.log(userFromRequest)
+  if (!token || !userFromRequest) return response.status(401).json({ error: 'token missing or invalid' })
+  const verifiedUserId = userFromRequest.id
 
   const blog = request.body
   blog.likes = blog.likes || 0
@@ -34,10 +34,17 @@ blogsRouter.post('/', async (request, response) => {
   return response.status(201).json(savedBlog)
 })
 
-blogsRouter.delete('/:id', async (request, response) => {
+blogsRouter.delete('/:id', userExtractor, async (request, response) => {
+  const userFromRequest = request.user
   const { id } = request.params
-  await Blog.findByIdAndRemove(id)
-  response.status(204).end()
+
+  const blog = await Blog.findById(id)
+
+  if (blog.user.toString() === userFromRequest.id.toString()) {
+    await Blog.findByIdAndRemove(id)
+    return response.status(204).end()
+  }
+  return response.status(403).send({ error: 'you are not the owner of this blog' })
 })
 
 blogsRouter.put('/:id', async (request, response) => {
