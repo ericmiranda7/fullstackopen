@@ -17,18 +17,29 @@ const App = () => {
     )  
   }, [])
 
+  useEffect(() => {
+    const user = window.localStorage.getItem('user')
+    setUser(JSON.parse(user))
+  }, [])
+
   const handleLogin = async (event) => {
     event.preventDefault()
 
     try {
       const user = await loginService.login({ username, password })
       
+      window.localStorage.setItem('user', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
     } catch {
       console.log('invalid creds')
     } 
+  }
+
+  const handleLogout = () => {
+    window.localStorage.removeItem('user')
+    setUser(null)
   }
 
   const showBlogs = () => (
@@ -44,17 +55,25 @@ const App = () => {
     </div>
   )
 
-  return (
-    <div>
-    {user === null
-      ? <Login
+  if (user === null) {
+    return (
+      <div>
+        <Login
           handleLogin={handleLogin}
           username={username}
           setUsername={setUsername}
           password={password}
           setPassword={setPassword}  
         />
-      : showBlogs()}
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      {showBlogs()}
+      <br/>
+      <button onClick={handleLogout}>Logout</button>
     </div>
   )
 }
