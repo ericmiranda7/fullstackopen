@@ -3,18 +3,21 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Login from './components/Login'
 import loginService from './services/login'
-import loginForm from './components/Login'
+import CreateBlog from './components/CreateBlog'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null) 
-  
+  const [user, setUser] = useState(null)
+  const [blogTitle, setTitle] = useState('')
+  const [blogAuthor, setAuthor] = useState('')
+  const [blogUrl, setUrl] = useState('')
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
+      setBlogs(blogs)
+    )
   }, [])
 
   useEffect(() => {
@@ -27,33 +30,20 @@ const App = () => {
 
     try {
       const user = await loginService.login({ username, password })
-      
+
       window.localStorage.setItem('user', JSON.stringify(user))
       setUser(user)
       setUsername('')
       setPassword('')
     } catch {
       console.log('invalid creds')
-    } 
+    }
   }
 
   const handleLogout = () => {
     window.localStorage.removeItem('user')
     setUser(null)
   }
-
-  const showBlogs = () => (
-    <div>
-      <h2>blogs</h2>
-      <div>{user.name} logged in</div>
-      <br/>
-      {blogs.filter(
-        blog => blog.user.username === user.username
-      ).map(blog =>
-        <Blog key={blog.id} blog={blog} />
-      )}
-    </div>
-  )
 
   if (user === null) {
     return (
@@ -63,17 +53,45 @@ const App = () => {
           username={username}
           setUsername={setUsername}
           password={password}
-          setPassword={setPassword}  
+          setPassword={setPassword}
         />
       </div>
     )
   }
 
+  const handleCreation = (event) => {
+    event.preventDefault()
+
+    // create note here
+  }
+
+
   return (
     <div>
-      {showBlogs()}
-      <br/>
-      <button onClick={handleLogout}>Logout</button>
+      <div>
+        <h2>blogs</h2>
+        {user.name} logged in
+        <button onClick={handleLogout}>Logout</button>
+        <br />
+
+        <h2>Create new Blog</h2>
+        <CreateBlog
+          handleCreation={handleCreation}
+          blogTitle={blogTitle}
+          setTitle={setTitle}
+          blogAuthor={blogAuthor}
+          setAuthor={setAuthor}
+          blogUrl={blogUrl}
+          setUrl={setUrl}
+        />
+        
+        
+        {blogs.filter(
+          blog => blog.user.username === user.username
+        ).map(blog =>
+          <Blog key={blog.id} blog={blog} />
+        )}
+      </div>
     </div>
   )
 }
