@@ -106,7 +106,7 @@ const App = () => {
           message={message}
         />
 
-        <Togglable buttonText='New Blog' ref={blogFormRef}>
+        <Togglable ref={blogFormRef}>
           <h2>Create new Blog</h2>
           <BlogForm
             createBlog={createBlog}
