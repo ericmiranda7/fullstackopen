@@ -7,7 +7,7 @@ const CreateBlog = ({ createBlog }) => {
 
   const handleCreation = async (event) => {
     event.preventDefault()
-    
+
     const blog = {
       title: blogTitle,
       author: blogAuthor,

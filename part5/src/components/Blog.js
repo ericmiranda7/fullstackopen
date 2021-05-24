@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 
 const styles = {
   borderStyle: 'solid',
@@ -15,14 +15,14 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
       ...blog,
       likes: blog.likes + 1
     }
-    
+
     updateBlog(newBlog)
   }
 
   const handleDelete = () => {
     return window.confirm(`Are you sure you want to remove blog: ${blog.title} by ${blog.author} ?`)
-    ? deleteBlog(blog)
-    : null
+      ? deleteBlog(blog)
+      : null
   }
 
   return (
@@ -31,10 +31,10 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
       { detailedView
         ? (
           <div>
-          <p>{blog.url}</p>
-          <p>{blog.likes} <button onClick={handleLike}>like</button></p>
-          <p>{blog.user.name}</p>
-          <button onClick={handleDelete}>remove</button>
+            <p>{blog.url}</p>
+            <p>{blog.likes} <button onClick={handleLike}>like</button></p>
+            <p>{blog.user.name}</p>
+            <button onClick={handleDelete}>remove</button>
           </div>
         )
         : null

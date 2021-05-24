@@ -55,7 +55,7 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
 
     const token = user.token
-    
+
     await blogService.postBlog(blog, token)
     setBlogs(await blogService.getAll())
     setMessage({
@@ -71,7 +71,7 @@ const App = () => {
         <Notification
           message={message}
         />
-          
+
         <LoginForm
           handleLogin={handleLogin}
           username={username}

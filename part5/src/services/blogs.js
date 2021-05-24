@@ -8,7 +8,7 @@ const getAll = () => {
 
 const postBlog = async (blog, token) => {
   const config = {
-    headers: { authorization: `bearer ${token}`}
+    headers: { authorization: `bearer ${token}` }
   }
 
   const response = await axios.post(baseUrl, blog, config)
@@ -22,7 +22,7 @@ const updateBlog = async (blog) => {
 
 const deleteBlog = async (id, token) => {
   const config = {
-    headers: { authorization: `bearer ${token}`}
+    headers: { authorization: `bearer ${token}` }
   }
   await axios.delete(`${baseUrl}/${id}`, config)
 }
