@@ -83,6 +83,11 @@ const App = () => {
     )
   }
 
+  const incrLikes = async (blog) => {
+    await blogService.updateBlog(blog)
+    setBlogs(await blogService.getAll())
+  }
+
   return (
     <div>
       <div>
@@ -105,7 +110,7 @@ const App = () => {
         {blogs.filter(
           blog => blog.user.username === user.username
         ).map(blog =>
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} updateBlog={incrLikes} />
         )}
       </div>
     </div>

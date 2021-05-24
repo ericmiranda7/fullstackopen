@@ -7,8 +7,17 @@ const styles = {
   padding: '2px'
 }
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, updateBlog }) => {
   const [detailedView, setDetailedView] = useState(false)
+
+  const handleLike = async () => {
+    const newBlog = {
+      ...blog,
+      likes: blog.likes + 1
+    }
+    
+    updateBlog(newBlog)
+  }
 
   return (
     <div style={styles}>
@@ -17,7 +26,7 @@ const Blog = ({ blog }) => {
         ? (
           <div>
           <p>{blog.url}</p>
-          <p>{blog.likes} <button>like</button></p>
+          <p>{blog.likes} <button onClick={handleLike}>like</button></p>
           <p>{blog.user.name}</p>
           </div>
         )
