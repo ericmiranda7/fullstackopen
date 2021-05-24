@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import Login from './components/Login'
 import loginService from './services/login'
 import CreateBlog from './components/CreateBlog'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -13,6 +14,7 @@ const App = () => {
   const [blogTitle, setTitle] = useState('')
   const [blogAuthor, setAuthor] = useState('')
   const [blogUrl, setUrl] = useState('')
+  const [message, setMessage] = useState({})
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -36,7 +38,11 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch {
-      console.log('invalid creds')
+      setMessage({
+        text: 'Username or password invalid',
+        type: 'error'
+      })
+      setTimeout(() => setMessage(null), 5000)
     }
   }
 
@@ -48,6 +54,10 @@ const App = () => {
   if (user === null) {
     return (
       <div>
+        <Notification
+          message={message}
+        />
+          
         <Login
           handleLogin={handleLogin}
           username={username}
@@ -72,6 +82,12 @@ const App = () => {
     
     const createdBlog = await blogService.postBlog(blog, token)
     setBlogs(await blogService.getAll())
+
+    setMessage({
+      text: 'Blog created successfully',
+      type: 'success'
+    })
+    setTimeout(() => setMessage(null), 5000)
   }
 
 
@@ -83,6 +99,10 @@ const App = () => {
         <button onClick={handleLogout}>Logout</button>
         <br />
 
+        <Notification
+          message={message}
+        />
+
         <h2>Create new Blog</h2>
         <CreateBlog
           handleCreation={handleCreation}
@@ -93,7 +113,6 @@ const App = () => {
           blogUrl={blogUrl}
           setUrl={setUrl}
         />
-        {console.log('jsx is', blogs)}
         {blogs.filter(
           blog => blog.user.username === user.username
         ).map(blog =>
