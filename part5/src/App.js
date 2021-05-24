@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
-import Login from './components/Login'
+import LoginForm from './components/LoginForm'
 import loginService from './services/login'
-import CreateBlog from './components/CreateBlog'
+import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [blogTitle, setTitle] = useState('')
-  const [blogAuthor, setAuthor] = useState('')
-  const [blogUrl, setUrl] = useState('')
   const [message, setMessage] = useState({})
 
   useEffect(() => {
@@ -51,6 +49,18 @@ const App = () => {
     setUser(null)
   }
 
+  const createBlog = async blog => {
+    const token = user.token
+    
+    await blogService.postBlog(blog, token)
+    setBlogs(await blogService.getAll())
+    setMessage({
+      text: 'Blog created successfully',
+      type: 'success'
+    })
+    setTimeout(() => setMessage(null), 5000)
+  }
+
   if (user === null) {
     return (
       <div>
@@ -58,7 +68,7 @@ const App = () => {
           message={message}
         />
           
-        <Login
+        <LoginForm
           handleLogin={handleLogin}
           username={username}
           setUsername={setUsername}
@@ -68,28 +78,6 @@ const App = () => {
       </div>
     )
   }
-
-  const handleCreation = async (event) => {
-    event.preventDefault()
-
-    // create note here
-    const token = user.token
-    const blog = {
-      title: blogTitle,
-      author: blogAuthor,
-      url: blogUrl
-    }
-    
-    const createdBlog = await blogService.postBlog(blog, token)
-    setBlogs(await blogService.getAll())
-
-    setMessage({
-      text: 'Blog created successfully',
-      type: 'success'
-    })
-    setTimeout(() => setMessage(null), 5000)
-  }
-
 
   return (
     <div>
@@ -103,16 +91,12 @@ const App = () => {
           message={message}
         />
 
-        <h2>Create new Blog</h2>
-        <CreateBlog
-          handleCreation={handleCreation}
-          blogTitle={blogTitle}
-          setTitle={setTitle}
-          blogAuthor={blogAuthor}
-          setAuthor={setAuthor}
-          blogUrl={blogUrl}
-          setUrl={setUrl}
-        />
+        <Togglable buttonText='New Blog'>
+          <h2>Create new Blog</h2>
+          <BlogForm
+            createBlog={createBlog}
+          />
+        </Togglable>
         {blogs.filter(
           blog => blog.user.username === user.username
         ).map(blog =>
