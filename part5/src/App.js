@@ -59,10 +59,19 @@ const App = () => {
     )
   }
 
-  const handleCreation = (event) => {
+  const handleCreation = async (event) => {
     event.preventDefault()
 
     // create note here
+    const token = user.token
+    const blog = {
+      title: blogTitle,
+      author: blogAuthor,
+      url: blogUrl
+    }
+    
+    const createdBlog = await blogService.postBlog(blog, token)
+    setBlogs(await blogService.getAll())
   }
 
 
@@ -84,8 +93,7 @@ const App = () => {
           blogUrl={blogUrl}
           setUrl={setUrl}
         />
-        
-        
+        {console.log('jsx is', blogs)}
         {blogs.filter(
           blog => blog.user.username === user.username
         ).map(blog =>
