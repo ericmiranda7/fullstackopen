@@ -7,7 +7,7 @@ const styles = {
   padding: '2px'
 }
 
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, deleteBlog }) => {
   const [detailedView, setDetailedView] = useState(false)
 
   const handleLike = async () => {
@@ -19,6 +19,12 @@ const Blog = ({ blog, updateBlog }) => {
     updateBlog(newBlog)
   }
 
+  const handleDelete = () => {
+    return window.confirm(`Are you sure you want to remove blog: ${blog.title} by ${blog.author} ?`)
+    ? deleteBlog(blog)
+    : null
+  }
+
   return (
     <div style={styles}>
       {blog.title} {blog.author} <button onClick={() => setDetailedView(!detailedView)}>{detailedView ? 'hide' : 'show'}</button>
@@ -28,6 +34,7 @@ const Blog = ({ blog, updateBlog }) => {
           <p>{blog.url}</p>
           <p>{blog.likes} <button onClick={handleLike}>like</button></p>
           <p>{blog.user.name}</p>
+          <button onClick={handleDelete}>remove</button>
           </div>
         )
         : null

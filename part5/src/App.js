@@ -88,6 +88,12 @@ const App = () => {
     setBlogs(await blogService.getAll())
   }
 
+  const deleteBlog = async (blog) => {
+    console.log('hai')
+    await blogService.deleteBlog(blog.id, user.token)
+    setBlogs(await blogService.getAll())
+  }
+
   return (
     <div>
       <div>
@@ -112,7 +118,7 @@ const App = () => {
         ).sort(
           (a, b) => b.likes - a.likes
         ).map(blog =>
-          <Blog key={blog.id} blog={blog} updateBlog={incrLikes} />
+          <Blog key={blog.id} blog={blog} updateBlog={incrLikes} deleteBlog={deleteBlog} />
         )}
       </div>
     </div>
