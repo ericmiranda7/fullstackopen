@@ -2,6 +2,7 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
+import BlogForm from './BlogForm'
 
 describe('Individual blog tests', () => {
   let component
@@ -46,5 +47,42 @@ describe('Individual blog tests', () => {
     fireEvent.click(likeButton)
 
     expect(updateBlog.mock.calls).toHaveLength(2)
+  })
+})
+
+describe('form tests', () => {
+  test('onSubmit form is fired with right inputs', () => {
+    const createBlog = jest.fn()
+
+    const component = render(
+      <BlogForm createBlog={createBlog} />
+    )
+
+    const titleInput = component.container.querySelector('#title')
+    const authorInput = component.container.querySelector('#author')
+    const urlInput = component.container.querySelector('#url')
+    const form = component.container.querySelector('form')
+
+    const submittedBlog = {
+      title: 'Created by Jest',
+      author: 'Jest Mirad',
+      url: 'www.http.com'
+    }
+
+    fireEvent.change(titleInput, {
+      target: { value: 'Created by Jest' }
+    })
+
+    fireEvent.change(authorInput, {
+      target: { value: 'Jest Mirad' }
+    })
+
+    fireEvent.change(urlInput, {
+      target: { value: 'www.http.com' }
+    })
+    fireEvent.submit(form)
+
+    expect(createBlog.mock.calls).toHaveLength(1)
+    expect(createBlog.mock.calls[0][0]).toEqual(submittedBlog)
   })
 })
