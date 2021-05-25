@@ -26,20 +26,17 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
   }
 
   return (
-    <div style={styles} className='blog'>
-      {blog.title} {blog.author}{' '}
-      <button onClick={() => setDetailedView(!detailedView)}>{detailedView ? 'hide' : 'show'}</button>
-      { detailedView
-        ? (
-          <div>
-            <p>{blog.url}</p>
-            <p>{blog.likes} <button onClick={handleLike}>like</button></p>
-            <p>{blog.user.name}</p>
-            <button onClick={handleDelete}>remove</button>
-          </div>
-        )
-        : null
-      }
+    <div style={styles} >
+      <div className="blog">
+        {blog.title} {blog.author}{' '}
+        <button onClick={() => setDetailedView(!detailedView)}>{detailedView ? 'hide' : 'show'}</button>
+      </div>
+      <div className="details" style={{ display: detailedView ? '' : 'none' }}>
+        <p>{blog.url}</p>
+        <p>{blog.likes} <button onClick={handleLike}>like</button></p>
+        <p>{blog.user.name}</p>
+        <button onClick={handleDelete}>remove</button>
+      </div>
     </div>
   )
 }
