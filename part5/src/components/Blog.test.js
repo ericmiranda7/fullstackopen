@@ -20,10 +20,11 @@ describe('Individual blog tests', () => {
   })
 
   test('blog renders title and author but not url or likes by default', () => {
+    const div = component.container.querySelector('.details')
+
     expect(component.container).toHaveTextContent('Test blog')
     expect(component.container).toHaveTextContent('Jest Mirad')
-    expect(component.container).not.toHaveTextContent('www.com')
-    expect(component.container).not.toHaveTextContent('likes')
+    expect(div).toHaveStyle('display: none')
   })
 
   test('details shown when show button clicked', () => {
@@ -32,6 +33,6 @@ describe('Individual blog tests', () => {
     fireEvent.click(showButton)
     const div = component.container.querySelector('.details')
 
-    expect(div).toHaveTextContent('www')
+    expect(div).not.toHaveStyle('display: none')
   })
 })
