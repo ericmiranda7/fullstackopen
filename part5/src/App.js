@@ -83,9 +83,14 @@ const App = () => {
     )
   }
 
-  const incrLikes = async (blog) => {
-    await blogService.updateBlog(blog)
-    setBlogs(await blogService.getAll())
+  const incrLikes = blog => {
+    setBlogs(blogs.map(
+      b => {
+        if (b.id === blog.id) b.likes++
+        return b
+      }
+    ))
+    blogService.updateBlog(blog)
   }
 
   const deleteBlog = async (blog) => {
