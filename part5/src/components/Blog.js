@@ -27,7 +27,7 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
 
   return (
     <div style={styles} className='blog'>
-      {blog.title} {blog.author}
+      {blog.title} {blog.author}{' '}
       <button onClick={() => setDetailedView(!detailedView)}>{detailedView ? 'hide' : 'show'}</button>
       { detailedView
         ? (
