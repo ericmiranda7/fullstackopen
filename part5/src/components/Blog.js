@@ -33,7 +33,7 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
       </div>
       <div className="details" style={{ display: detailedView ? '' : 'none' }}>
         <p>{blog.url}</p>
-        <p>{blog.likes} <button onClick={handleLike}>like</button></p>
+        <p>{blog.likes} <button className="likeButton" onClick={handleLike}>like</button></p>
         <p>{blog.user.name}</p>
         <button onClick={handleDelete}>remove</button>
       </div>
