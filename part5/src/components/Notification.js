@@ -22,7 +22,7 @@ const Notification = ({ message }) => {
 
   return (
     <div>
-      <p style={styles[message.type]}>{message.text}</p>
+      <p id="msg-p" style={styles[message.type]}>{message.text}</p>
     </div>
   )
 }

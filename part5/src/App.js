@@ -65,6 +65,22 @@ const App = () => {
     setTimeout(() => setMessage(null), 5000)
   }
 
+  const incrLikes = blog => {
+    setBlogs(blogs.map(
+      b => {
+        if (b.id === blog.id) b.likes++
+        return b
+      }
+    ))
+    blogService.updateBlog(blog)
+  }
+
+  const deleteBlog = async (blog) => {
+    console.log('hai')
+    await blogService.deleteBlog(blog.id, user.token)
+    setBlogs(await blogService.getAll())
+  }
+
   if (user === null) {
     return (
       <div>
@@ -81,22 +97,6 @@ const App = () => {
         />
       </div>
     )
-  }
-
-  const incrLikes = blog => {
-    setBlogs(blogs.map(
-      b => {
-        if (b.id === blog.id) b.likes++
-        return b
-      }
-    ))
-    blogService.updateBlog(blog)
-  }
-
-  const deleteBlog = async (blog) => {
-    console.log('hai')
-    await blogService.deleteBlog(blog.id, user.token)
-    setBlogs(await blogService.getAll())
   }
 
   return (
