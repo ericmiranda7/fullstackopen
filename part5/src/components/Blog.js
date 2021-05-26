@@ -7,7 +7,7 @@ const styles = {
   padding: '2px'
 }
 
-const Blog = ({ blog, updateBlog, deleteBlog }) => {
+const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   const [detailedView, setDetailedView] = useState(false)
 
   const handleLike = async () => {
@@ -35,7 +35,8 @@ const Blog = ({ blog, updateBlog, deleteBlog }) => {
         <p>{blog.url}</p>
         <p>{blog.likes} <button className="likeButton" onClick={handleLike}>like</button></p>
         <p>{blog.user.name}</p>
-        <button onClick={handleDelete}>remove</button>
+        { blog.user.name === user.name &&
+          <button onClick={handleDelete}>remove</button>}
       </div>
     </div>
   )
