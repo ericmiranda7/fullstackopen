@@ -23,12 +23,7 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-Cypress.Commands.add('createBlog', () => {
-  const blog = {
-    title: 'created using cypress',
-    author: 'cypress',
-    url: 'http://www.blah.com'
-  }
+Cypress.Commands.add('createBlog', (blog) => {
   cy.contains('Create Blog').click()
   cy.get('#title').type(blog.title)
   cy.get('#author').type(blog.author)

@@ -47,7 +47,12 @@ describe('Blog app', function () {
 
     describe('When blog is created..', function () {
       beforeEach(function () {
-        cy.createBlog()
+        const blog = {
+          title: 'created using cypress',
+          author: 'cypress',
+          url: 'http://www.blah.com'
+        }
+        cy.createBlog(blog)
       })
 
       it('Created blog is added to list', function () {
@@ -65,7 +70,7 @@ describe('Blog app', function () {
         cy.contains('remove')
       })
 
-      it.only('user can only delete own blogs', function () {
+      it('user can only delete own blogs', function () {
         // Create new user
         let user = {
           username: 'not_eric',
@@ -84,6 +89,35 @@ describe('Blog app', function () {
         // Check for remove button
         cy.contains('show').click()
         cy.get('.details').should('not.contain', 'remove')
+      })
+
+      it('blogs ordered by likes', function () {
+        const blog = {
+          title: 'second blog',
+          author: 'also cypress',
+          url: 'http://www.google.com'
+        }
+
+        cy.createBlog(blog)
+        cy.wait(2500)
+
+        cy.get('.blog')
+          .each(blog => {
+            cy.wrap(blog)
+              .contains('show')
+              .click()
+
+            cy.wrap(blog)
+              .contains('like')
+              .click()
+          })
+
+        cy.get('.blog:last')
+          .contains('like')
+          .click()
+
+        cy.get('.blog:first')
+          .contains('second blog also cypress')
       })
     })
   })
