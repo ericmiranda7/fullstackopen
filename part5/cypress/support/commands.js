@@ -35,3 +35,11 @@ Cypress.Commands.add('createBlog', () => {
   cy.get('#url').type(blog.url)
   cy.get('#submit-blog').click()
 })
+
+Cypress.Commands.add('login', (user) => {
+  cy.request('POST', 'http://localhost:3003/api/login', user)
+    .then(response => {
+      window.localStorage.setItem('user', JSON.stringify(response.body))
+      cy.visit('http://localhost:3000')
+    })
+})
