@@ -45,8 +45,24 @@ describe('Blog app', function () {
         })
     })
 
-    it.only('A blog can be created', function () {
+    it('A blog can be created', function () {
       cy.contains('Create Blog')
+    })
+
+    it.only('Created blog is added to list', function () {
+      const blog = {
+        title: 'created using cypress',
+        author: 'cypress',
+        url: 'http://www.blah.com'
+      }
+
+      cy.contains('Create Blog').click()
+      cy.get('#title').type(blog.title)
+      cy.get('#author').type(blog.author)
+      cy.get('#url').type(blog.url)
+      cy.get('#submit-blog').click()
+
+      cy.contains(blog.title)
     })
   })
 })
