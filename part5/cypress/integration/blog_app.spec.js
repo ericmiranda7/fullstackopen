@@ -43,26 +43,25 @@ describe('Blog app', function () {
           window.localStorage.setItem('user', JSON.stringify(response.body))
           cy.visit('http://localhost:3000')
         })
+
     })
 
     it('A blog can be created', function () {
       cy.contains('Create Blog')
     })
 
-    it.only('Created blog is added to list', function () {
-      const blog = {
-        title: 'created using cypress',
-        author: 'cypress',
-        url: 'http://www.blah.com'
-      }
+    it('Created blog is added to list', function () {
+      cy.createBlog()
 
-      cy.contains('Create Blog').click()
-      cy.get('#title').type(blog.title)
-      cy.get('#author').type(blog.author)
-      cy.get('#url').type(blog.url)
-      cy.get('#submit-blog').click()
+      cy.contains('created using cypress')
+    })
 
-      cy.contains(blog.title)
+    it('user can like a blog', function () {
+      cy.createBlog()
+
+      cy.get('#show-details-button').click()
+      cy.get('.likeButton').click()
+      cy.get('#likes').contains('1')
     })
   })
 })

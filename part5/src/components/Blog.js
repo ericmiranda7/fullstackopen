@@ -29,11 +29,11 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
     <div style={styles} >
       <div className="blog">
         {blog.title} {blog.author}{' '}
-        <button onClick={() => setDetailedView(!detailedView)}>{detailedView ? 'hide' : 'show'}</button>
+        <button id="show-details-button" onClick={() => setDetailedView(!detailedView)}>{detailedView ? 'hide' : 'show'}</button>
       </div>
       <div className="details" style={{ display: detailedView ? '' : 'none' }}>
         <p>{blog.url}</p>
-        <p>{blog.likes} <button className="likeButton" onClick={handleLike}>like</button></p>
+        <p id="likes">{blog.likes} <button className="likeButton" onClick={handleLike}>like</button></p>
         <p>{blog.user.name}</p>
         { blog.user.name === user.name &&
           <button onClick={handleDelete}>remove</button>}
