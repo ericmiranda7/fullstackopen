@@ -12,15 +12,23 @@ const App = () => {
     })
   }
 
+  const handleAction = action => {
+    return () => {
+      store.dispatch({
+        type: action
+      })
+    }
+  }
+
   return (
     <div>
-      <button onClick={good}>good</button> 
-      <button>neutral</button> 
-      <button>bad</button>
-      <button>reset stats</button>
+      <button onClick={handleAction('GOOD')}>good</button>
+      <button onClick={handleAction('OK')}>neutral</button>
+      <button onClick={handleAction('BAD')}>bad</button>
+      <button onClick={handleAction('ZERO')}>reset stats</button>
       <div>good {store.getState().good}</div>
-      <div>neutral</div>
-      <div>bad</div>
+      <div>neutral {store.getState().ok}</div>
+      <div>bad {store.getState().bad}</div>
     </div>
   )
 }
