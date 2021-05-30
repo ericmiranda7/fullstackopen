@@ -20,4 +20,14 @@ describe('anecdoteReducer tests', () => {
 
     expect(newState[1]).toEqual({ ...state[1], votes: 1 })
   })
+
+  test('add action adds votes', () => {
+    const newAnecdote = {
+      content: 'new Anec',
+    }
+
+    const newState = reducer(state, { type: 'ADD', data: { anecdote: newAnecdote } })
+
+    expect(newState).toHaveLength(3)
+  })
 })
