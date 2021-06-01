@@ -4,7 +4,7 @@ import { voteAnecdote } from '../reducers/anecdoteReducer'
 
 const Anecdote = ({ anecdote, handler }) => {
   return (
-    <div key={anecdote.id}>
+    <div> 
       <div>
         {anecdote.content}
       </div>
@@ -28,7 +28,7 @@ const AnecdoteList = props => {
   return (
     <div>
       {anecdotes.map(anecdote =>
-        <Anecdote anecdote={anecdote} handler={() => vote(anecdote.id)} />)}
+        <Anecdote key={anecdote.id} anecdote={anecdote} handler={() => vote(anecdote.id)} />)}
     </div>
   )
 }
