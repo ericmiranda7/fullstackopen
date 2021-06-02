@@ -21,6 +21,7 @@ const AnecdoteList = props => {
   const anecdotes = useSelector(state => state.anecdotes
     .concat()
     .sort((a, b) => b.votes - a.votes))
+  const filter = useSelector(state => state.filter)
   const dispatch = useDispatch()
 
   const vote = (id) => {
@@ -30,7 +31,9 @@ const AnecdoteList = props => {
   }
   return (
     <div>
-      {anecdotes.map(anecdote =>
+      {anecdotes
+        .filter(anec => anec.content.includes(filter))
+        .map(anecdote =>
         <Anecdote key={anecdote.id} anecdote={anecdote} handler={() => vote(anecdote.id)} />)}
     </div>
   )
