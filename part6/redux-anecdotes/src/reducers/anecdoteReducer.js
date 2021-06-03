@@ -12,9 +12,12 @@ const asObject = (anecdote) => {
 
 // Action creators
 export const voteAnecdote = id => {
-  return {
-    type: 'VOTE',
-    data: { id }
+  return async (dispatch) => {
+    await anecdoteService.voteAnecdote(id)
+    dispatch({
+      type:'VOTE',
+      payload: id
+    })
   }
 }
 
@@ -44,7 +47,7 @@ const anecdoteReducer = (state = [], action) => {
 
   switch (action.type) {
     case 'VOTE':
-      return state.map(anec => anec.id === action.data.id
+      return state.map(anec => anec.id === action.payload
         ? { ...anec, votes: anec.votes + 1 }
         : anec)
     case 'ADD':
