@@ -1,3 +1,5 @@
+let timeouts = [];
+
 const notificationReducer = (state = null, action) => {
   switch (action.type) {
     case 'NOTIFY':
@@ -13,12 +15,14 @@ export const setNotification = (message, timeout) => {
   return async (dispatch) => {
     dispatch({
       type: 'NOTIFY',
-      payload: message
+      payload: message,
     })
-    setTimeout(
+    timeouts.forEach(t => clearTimeout(t))
+    timeouts = []
+    timeouts = timeouts.concat(setTimeout(
       () => dispatch(removeNotification()),
       timeout * 1000
-    )
+    ))
   }
 }
 
