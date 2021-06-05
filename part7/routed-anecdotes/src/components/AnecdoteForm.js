@@ -19,7 +19,7 @@ const CreateNew = (props) => {
     })
 
     history.push('/')
-    props.setNotif(content)
+    props.setNotif(content.value)
     setTimeout(
       () => props.setNotif(null),
       10000
@@ -39,17 +39,17 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' {...content} />
+          <input name='content' {...content} reset="" />
         </div>
         <div>
           author
-          <input name='author' {...author} />
+          <input name='author' {...author} reset="" />
         </div>
         <div>
           url for more info
-          <input name='info' {...info} />
+          <input name='info' {...info} reset="" />
         </div>
-        <button>create</button>
+        <button type="submit">create</button>
         <button onClick={handleReset}>reset</button>
       </form>
     </div>
