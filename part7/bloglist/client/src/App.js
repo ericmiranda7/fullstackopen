@@ -6,14 +6,16 @@ import loginService from './services/login'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import { useSelector, useDispatch } from 'react-redux'
+import { clearNotification, setMessage } from './reducers/notificationReducer'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [message, setMessage] = useState({})
-
+  const message = useSelector(state => state)
+  const dispatch = useDispatch()
   const blogFormRef = useRef()
 
   useEffect(() => {
@@ -38,11 +40,13 @@ const App = () => {
       setUsername('')
       setPassword('')
     } catch {
-      setMessage({
-        text: 'Username or password invalid',
-        type: 'error'
-      })
-      setTimeout(() => setMessage(null), 5000)
+      dispatch(
+        setMessage({
+          text: 'Username or password invalid',
+          type: 'error'
+        })
+      )
+      setTimeout(() => dispatch(clearNotification()), 5000)
     }
   }
 
@@ -58,11 +62,11 @@ const App = () => {
 
     await blogService.postBlog(blog, token)
     setBlogs(await blogService.getAll())
-    setMessage({
+    dispatch(setMessage({
       text: 'Blog created successfully',
       type: 'success'
-    })
-    setTimeout(() => setMessage(null), 5000)
+    }))
+    setTimeout(() => dispatch(clearNotification), 5000)
   }
 
   const incrLikes = blog => {
