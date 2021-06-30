@@ -9,15 +9,13 @@ import Togglable from './components/Togglable'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearNotification, setMessage } from './reducers/notificationReducer'
 import { getBlogsFromDb, likeBlog } from './reducers/blogReducer'
+import { setUser } from './reducers/userReducer'
 
 const App = () => {
-  const blogs = useSelector(state => {
-    console.log(state.blogs)
-    return state.blogs
-  })
+  const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
   const message = useSelector(state => state.notification)
   const dispatch = useDispatch()
   const blogFormRef = useRef()
@@ -28,7 +26,7 @@ const App = () => {
 
   useEffect(() => {
     const user = window.localStorage.getItem('user')
-    setUser(JSON.parse(user))
+    dispatch(setUser(JSON.parse(user)))
   }, [])
 
   const handleLogin = async (event) => {
@@ -38,7 +36,7 @@ const App = () => {
       const user = await loginService.login({ username, password })
 
       window.localStorage.setItem('user', JSON.stringify(user))
-      setUser(user)
+      dispatch(setUser(user))
       setUsername('')
       setPassword('')
     } catch {
@@ -54,7 +52,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('user')
-    setUser(null)
+    dispatch(setUser(null))
   }
 
   const createBlog = async blog => {
@@ -72,12 +70,6 @@ const App = () => {
   }
 
   const incrLikes = blog => {
-    /*     setBlogs(blogs.map(
-          b => {
-            if (b.id === blog.id) b.likes++
-            return b
-          }
-        )) */
     blogService.updateBlog(blog)
     dispatch(likeBlog(blog))
   }
