@@ -8,20 +8,22 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearNotification, setMessage } from './reducers/notificationReducer'
+import { getBlogsFromDb } from './reducers/blogReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(state => {
+    console.log(state.blogs)
+    return state.blogs
+  })
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const message = useSelector(state => state)
+  const message = useSelector(state => state.notification)
   const dispatch = useDispatch()
   const blogFormRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs(blogs)
-    )
+    dispatch(getBlogsFromDb())
   }, [])
 
   useEffect(() => {
@@ -61,7 +63,7 @@ const App = () => {
     const token = user.token
 
     await blogService.postBlog(blog, token)
-    setBlogs(await blogService.getAll())
+    dispatch(getBlogsFromDb())
     dispatch(setMessage({
       text: 'Blog created successfully',
       type: 'success'
@@ -70,19 +72,19 @@ const App = () => {
   }
 
   const incrLikes = blog => {
-    setBlogs(blogs.map(
-      b => {
-        if (b.id === blog.id) b.likes++
-        return b
-      }
-    ))
+    /*     setBlogs(blogs.map(
+          b => {
+            if (b.id === blog.id) b.likes++
+            return b
+          }
+        )) */
     blogService.updateBlog(blog)
+    dispatch(getBlogsFromDb())
   }
 
   const deleteBlog = async (blog) => {
-    console.log('hai')
     await blogService.deleteBlog(blog.id, user.token)
-    setBlogs(await blogService.getAll())
+    dispatch(getBlogsFromDb())
   }
 
   if (user === null) {
