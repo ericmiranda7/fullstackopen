@@ -8,7 +8,7 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearNotification, setMessage } from './reducers/notificationReducer'
-import { getBlogsFromDb } from './reducers/blogReducer'
+import { getBlogsFromDb, likeBlog } from './reducers/blogReducer'
 
 const App = () => {
   const blogs = useSelector(state => {
@@ -79,7 +79,7 @@ const App = () => {
           }
         )) */
     blogService.updateBlog(blog)
-    dispatch(getBlogsFromDb())
+    dispatch(likeBlog(blog))
   }
 
   const deleteBlog = async (blog) => {
