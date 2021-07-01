@@ -23,7 +23,6 @@ const App = () => {
 
   useEffect(async () => {
     const users = await userService.getAll()
-    console.log(users)
     setUsers(users)
   }, [])
 
@@ -68,6 +67,7 @@ const App = () => {
   const displayUser = matchUser
     ? users.find(user => user.id === String(matchUser.params.id))
     : null
+
 
   if (user === null) {
     return (

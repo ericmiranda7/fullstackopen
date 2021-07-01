@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const styles = {
   borderStyle: 'solid',
@@ -7,8 +8,11 @@ const styles = {
   padding: '2px'
 }
 
-const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
-  const [detailedView, setDetailedView] = useState(false)
+const Blog = ({ blog, updateBlog, deleteBlog, user, show = false }) => {
+  if (!blog) return null
+  console.log(show)
+
+  const [detailedView, setDetailedView] = useState(show)
 
   const handleLike = async () => {
     const newBlog = {
@@ -28,8 +32,8 @@ const Blog = ({ blog, updateBlog, deleteBlog, user }) => {
   return (
     <div className="blog" style={styles} >
       <div>
-        {blog.title} {blog.author}{' '}
-        <button id="show-details-button" onClick={() => setDetailedView(!detailedView)}>{detailedView ? 'hide' : 'show'}</button>
+        <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}{' '}</Link>
+        <button id="show-details-button" style={{ display: 'none' }} onClick={() => setDetailedView(!detailedView)}>{detailedView ? 'hide' : 'show'}</button>
       </div>
       <div className="details" style={{ display: detailedView ? '' : 'none' }}>
         <p>{blog.url}</p>

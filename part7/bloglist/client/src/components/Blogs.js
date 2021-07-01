@@ -6,6 +6,7 @@ import BlogForm from './BlogForm'
 import { getBlogsFromDb, likeBlog } from '../reducers/blogReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { setMessage, clearNotification } from '../reducers/notificationReducer'
+import { Switch, Route, useRouteMatch } from 'react-router'
 
 
 const Blogs = () => {
@@ -28,6 +29,11 @@ const Blogs = () => {
     setTimeout(() => dispatch(clearNotification), 5000)
   }
 
+  const matchBlog = useRouteMatch('/blogs/:id')
+  const displayBlog = matchBlog
+    ? blogs.find(blog => blog.id === String(matchBlog.params.id))
+    : null
+
   const incrLikes = blog => {
     blogService.updateBlog(blog)
     dispatch(likeBlog(blog))
@@ -37,23 +43,31 @@ const Blogs = () => {
     await blogService.deleteBlog(blog.id, user.token)
     dispatch(getBlogsFromDb())
   }
-  return (
-    <div>
-      <Togglable buttonText='Create Blog' ref={blogFormRef}>
-        <h2>Create new Blog</h2>
-        <BlogForm
-          createBlog={createBlog}
-        />
-      </Togglable>
 
-      {
-        blogs.sort(
-          (a, b) => b.likes - a.likes
-        ).map(blog =>
-          <Blog key={blog.id} user={user} blog={blog} updateBlog={incrLikes} deleteBlog={deleteBlog} />
-        )
-      }
-    </div>
+  return (
+    <Switch>
+      <Route path="/:id">
+        <Blog show user={user} blog={displayBlog} updateBlog={incrLikes} deleteBlog={deleteBlog} />
+      </Route>
+      <Route path="/">
+        <div>
+          <Togglable buttonText='Create Blog' ref={blogFormRef}>
+            <h2>Create new Blog</h2>
+            <BlogForm
+              createBlog={createBlog}
+            />
+          </Togglable>
+
+          {
+            blogs.sort(
+              (a, b) => b.likes - a.likes
+            ).map(blog =>
+              <Blog key={blog.id} user={user} blog={blog} updateBlog={incrLikes} deleteBlog={deleteBlog} />
+            )
+          }
+        </div>
+      </Route>
+    </Switch>
   )
 }
 
