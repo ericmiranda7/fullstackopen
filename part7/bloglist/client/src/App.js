@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { clearNotification, setMessage } from './reducers/notificationReducer'
 import { getBlogsFromDb } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
-import { Switch, Route, useRouteMatch, useHistory } from 'react-router-dom'
+import { Link, Switch, Route, useRouteMatch, useHistory } from 'react-router-dom'
 import Blogs from './components/Blogs'
 import Users from './components/Users'
 import userService from './services/users'
@@ -90,9 +90,12 @@ const App = () => {
   return (
     <div>
       <div>
-        <h2>blogs</h2>
-        {user.name} logged in
-        <button onClick={handleLogout}>Logout</button>
+        <nav style={{ backgroundColor: 'gray', padding: '0.5em' }}>
+          <span><Link to="/">blogs</Link> <Link to="/users">users </Link></span>
+          {user.name} logged in
+          <button onClick={handleLogout}>Logout</button>
+        </nav>
+        <h2>blog app</h2>
         <br />
 
         <Notification
