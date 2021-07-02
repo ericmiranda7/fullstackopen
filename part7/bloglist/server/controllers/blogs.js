@@ -2,7 +2,7 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
 const User = require('../models/user')
-const {userExtractor } = require('../utils/middleware')
+const { userExtractor } = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
@@ -13,7 +13,6 @@ blogsRouter.post('/', userExtractor, async (request, response) => {
   const { token } = request
 
   const userFromRequest = request.user
-  console.log(userFromRequest)
   if (!token || !userFromRequest) return response.status(401).json({ error: 'token missing or invalid' })
   const verifiedUserId = userFromRequest.id
 
@@ -45,6 +44,17 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
     return response.status(204).end()
   }
   return response.status(403).send({ error: 'you are not the owner of this blog' })
+})
+
+blogsRouter.post('/:id/comments', async (request, response) => {
+  const { id } = request.params
+  const { comment } = request.body
+
+  const blog = await Blog.findById(id)
+
+  blog.comments.push(comment)
+  await blog.save()
+  response.status(201).end()
 })
 
 blogsRouter.put('/:id', async (request, response) => {

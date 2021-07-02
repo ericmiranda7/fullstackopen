@@ -38,9 +38,17 @@ const Blog = ({ blog, updateBlog, deleteBlog, user, show = false }) => {
       <div className="details" style={{ display: detailedView ? '' : 'none' }}>
         <p>{blog.url}</p>
         <p id="likes">{blog.likes} <button className="likeButton" onClick={handleLike}>like</button></p>
-        <p>{blog.user.name}</p>
+        <p>added by {blog.user.name}</p>
         {blog.user.username === user.username &&
           <button onClick={handleDelete}>remove</button>}
+        <div>
+          <h3>comments</h3>
+          <ul>
+            {
+              blog.comments.map((comment, i) => <li key={i}>{comment}</li>)
+            }
+          </ul>
+        </div>
       </div>
     </div>
   )
