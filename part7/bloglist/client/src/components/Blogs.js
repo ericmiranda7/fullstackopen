@@ -6,7 +6,7 @@ import BlogForm from './BlogForm'
 import { getBlogsFromDb, likeBlog } from '../reducers/blogReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { setMessage, clearNotification } from '../reducers/notificationReducer'
-import { Switch, Route, useRouteMatch } from 'react-router'
+import {  Switch, Route, useRouteMatch } from 'react-router'
 
 
 const Blogs = () => {

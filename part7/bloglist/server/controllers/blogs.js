@@ -49,6 +49,7 @@ blogsRouter.delete('/:id', userExtractor, async (request, response) => {
 blogsRouter.post('/:id/comments', async (request, response) => {
   const { id } = request.params
   const { comment } = request.body
+  console.log(comment)
 
   const blog = await Blog.findById(id)
 

@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
+import useField from '../hooks/useField'
+import blogService from '../services/blogs'
+import { useDispatch } from 'react-redux'
+import { getBlogsFromDb } from '../reducers/blogReducer'
+import { useHistory } from 'react-router'
 
 const styles = {
   borderStyle: 'solid',
@@ -10,9 +15,11 @@ const styles = {
 
 const Blog = ({ blog, updateBlog, deleteBlog, user, show = false }) => {
   if (!blog) return null
-  console.log(show)
 
   const [detailedView, setDetailedView] = useState(show)
+  const comment = useField('text')
+  const dispatch = useDispatch()
+  const history = useHistory()
 
   const handleLike = async () => {
     const newBlog = {
@@ -29,6 +36,14 @@ const Blog = ({ blog, updateBlog, deleteBlog, user, show = false }) => {
       : null
   }
 
+  const handleSubmitComment = (e) => {
+    e.preventDefault()
+
+    blogService.postComment(blog, comment.value)
+    dispatch(getBlogsFromDb())
+    history.go(0)
+  }
+
   return (
     <div className="blog" style={styles} >
       <div>
@@ -43,6 +58,12 @@ const Blog = ({ blog, updateBlog, deleteBlog, user, show = false }) => {
           <button onClick={handleDelete}>remove</button>}
         <div>
           <h3>comments</h3>
+          <div>
+            <form>
+              <input {...comment} />
+              <button type="submit" onClick={handleSubmitComment}>add comment</button>
+            </form>
+          </div>
           <ul>
             {
               blog.comments.map((comment, i) => <li key={i}>{comment}</li>)
