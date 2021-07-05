@@ -1,31 +1,32 @@
 import React from 'react'
+import { Form, Button } from 'react-bootstrap'
 
 const loginForm = ({ handleLogin, username, setUsername, password, setPassword }) => (
-  <div>
+  <div className="container" >
     <h2>Please Login</h2>
-    <form onSubmit={handleLogin}>
-      <div>
-        <label htmlFor="username">Username:</label>
-        <input
+    <Form onSubmit={handleLogin}>
+      <Form.Group>
+        <Form.Label htmlFor="username">Username:</Form.Label>
+        <Form.Control
           id="username"
           type="text"
           name="username"
           value={username}
           onChange={({ target }) => setUsername(target.value)}
         />
-      </div>
-      <div>
-        <label htmlFor="password">Password:</label>
-        <input
+      </Form.Group>
+      <Form.Group>
+        <Form.Label htmlFor="password">Password:</Form.Label>
+        <Form.Control
           id="password"
           type="password"
           name="password"
           value={password}
           onChange={({ target }) => setPassword(target.value)}
         />
-      </div>
-      <button id="login-button" type="submit">Login</button>
-    </form>
+      </Form.Group>
+      <Button className="mt-2" type="submit">Login</Button>
+    </Form>
   </div>
 )
 

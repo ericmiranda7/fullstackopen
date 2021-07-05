@@ -6,8 +6,8 @@ import BlogForm from './BlogForm'
 import { getBlogsFromDb, likeBlog } from '../reducers/blogReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { setMessage, clearNotification } from '../reducers/notificationReducer'
-import {  Switch, Route, useRouteMatch } from 'react-router'
-
+import { Switch, Route, useRouteMatch } from 'react-router'
+import { Card, ListGroup } from 'react-bootstrap'
 
 const Blogs = () => {
   const blogs = useSelector(state => state.blogs)
@@ -51,18 +51,26 @@ const Blogs = () => {
       </Route>
       <Route path="/">
         <div>
-          <Togglable buttonText='Create Blog' ref={blogFormRef}>
-            <h2>Create new Blog</h2>
-            <BlogForm
-              createBlog={createBlog}
-            />
-          </Togglable>
-
+          <div className="mb-2">
+            <Togglable buttonText='Create Blog' ref={blogFormRef}>
+              <h2>Create new Blog</h2>
+              <BlogForm
+                createBlog={createBlog}
+              />
+            </Togglable>
+          </div>
           {
             blogs.sort(
               (a, b) => b.likes - a.likes
             ).map(blog =>
-              <Blog key={blog.id} user={user} blog={blog} updateBlog={incrLikes} deleteBlog={deleteBlog} />
+              <Card key={blog.id} >
+                <ListGroup variant="flush">
+                  <ListGroup.Item>
+                    <Blog user={user} blog={blog} updateBlog={incrLikes} deleteBlog={deleteBlog} />
+                  </ListGroup.Item>
+                </ListGroup>
+
+              </Card>
             )
           }
         </div>

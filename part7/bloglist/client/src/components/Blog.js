@@ -5,13 +5,8 @@ import blogService from '../services/blogs'
 import { useDispatch } from 'react-redux'
 import { getBlogsFromDb } from '../reducers/blogReducer'
 import { useHistory } from 'react-router'
-
-const styles = {
-  borderStyle: 'solid',
-  borderWidth: '1px',
-  margin: '5px',
-  padding: '2px'
-}
+import { Button } from 'react-bootstrap'
+import { Card, ListGroup, ListGroupItem } from 'react-bootstrap'
 
 const Blog = ({ blog, updateBlog, deleteBlog, user, show = false }) => {
   if (!blog) return null
@@ -45,33 +40,51 @@ const Blog = ({ blog, updateBlog, deleteBlog, user, show = false }) => {
   }
 
   return (
-    <div className="blog" style={styles} >
-      <div>
-        <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}{' '}</Link>
-        <button id="show-details-button" style={{ display: 'none' }} onClick={() => setDetailedView(!detailedView)}>{detailedView ? 'hide' : 'show'}</button>
-      </div>
-      <div className="details" style={{ display: detailedView ? '' : 'none' }}>
-        <p>{blog.url}</p>
-        <p id="likes">{blog.likes} <button className="likeButton" onClick={handleLike}>like</button></p>
-        <p>added by {blog.user.name}</p>
-        {blog.user.username === user.username &&
-          <button onClick={handleDelete}>remove</button>}
-        <div>
-          <h3>comments</h3>
-          <div>
-            <form>
-              <input {...comment} />
-              <button type="submit" onClick={handleSubmitComment}>add comment</button>
-            </form>
-          </div>
-          <ul>
-            {
-              blog.comments.map((comment, i) => <li key={i}>{comment}</li>)
-            }
-          </ul>
+    <div className="blog" >
+      <Card >
+        <Card.Body>
+          <Card.Title>
+            <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author}{' '}</Link>
+          </Card.Title>
+        </Card.Body>
+        <div style={{ display: detailedView ? '' : 'none' }}>
+          <ListGroup className="list-group-flush">
+            <ListGroupItem>
+              Website: <a href={blog.url}>{blog.url}</a>
+            </ListGroupItem>
+            <ListGroupItem>
+              {blog.likes} <Button className="likeButton" onClick={handleLike}>like</Button>
+            </ListGroupItem>
+            <ListGroupItem>
+              added by {blog.user.name}
+            </ListGroupItem>
+          </ListGroup>
+          <Card.Body>
+            <div>
+              <h3>comments</h3>
+              <div>
+                <form>
+                  <input {...comment} />
+                  <Button type="submit" onClick={handleSubmitComment}>add comment</Button>
+                </form>
+              </div>
+              <ul>
+                {
+                  blog.comments.map((comment, i) => <li key={i}>{comment}</li>)
+                }
+              </ul>
+            </div>
+          </Card.Body>
+          <Card.Body>
+            {blog.user.username === user.username &&
+              <Button onClick={handleDelete}>Remove Blog</Button>}
+          </Card.Body>
         </div>
+      </Card>
+      <div>
+        <Button id="show-details-button" style={{ display: 'none' }} onClick={() => setDetailedView(!detailedView)}>{detailedView ? 'hide' : 'show'}</Button>
       </div>
-    </div>
+    </div >
   )
 }
 

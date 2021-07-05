@@ -11,6 +11,7 @@ import Blogs from './components/Blogs'
 import Users from './components/Users'
 import userService from './services/users'
 import User from './components/User'
+import { Navbar, Nav, Button } from 'react-bootstrap'
 
 const App = () => {
   const user = useSelector(state => state.user)
@@ -89,15 +90,21 @@ const App = () => {
 
   return (
     <div>
-      <div>
-        <nav style={{ backgroundColor: 'gray', padding: '0.5em' }}>
-          <span><Link to="/">blogs</Link> <Link to="/users">users </Link></span>
-          {user.name} logged in
-          <button onClick={handleLogout}>Logout</button>
-        </nav>
+      <div className="container-fluid" style={{ padding: '0px' }}>
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark" style={{ padding: '5px' }}>
+          <Navbar.Brand href="#home"><Link to="/" className="navbar-brand">Bloglist</Link></Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Link to="/" className="nav-link">blogs</Link>
+              <Link to="/users" className="nav-link">users </Link>
+              <Button onClick={handleLogout} className="nav-link">Logout</Button>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+      </div>
+      <div className="container mt-1">
         <h2>blog app</h2>
-        <br />
-
         <Notification
           message={message}
         />
